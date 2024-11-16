@@ -29,10 +29,25 @@ app.post('/usuarios', async (req, res) => {
 
 app.get('/usuarios', async (req, res) => {
     try {
-        
-        const allUsers = await prisma.user.findMany()
+        let users = []
 
-        res.status(200).json(allUsers)
+        if (req.query) {
+
+            users = await prisma.user.findMany({
+                where:{
+                    name: req.query.name,
+                    age: req.query.age,
+                    email: req.query.email
+                }
+            })
+
+        } else {
+            
+            users = await prisma.user.findMany()
+
+        }
+
+        res.status(200).json(users)
     } catch (error) {
 
         res.status(400).send("Erro ao tentar listar usuários.")
