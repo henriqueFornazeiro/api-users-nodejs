@@ -29,7 +29,7 @@ app.post('/usuarios', async (req, res) => {
 
 app.get('/usuarios', async (req, res) => {
     try {
-
+        
         const allUsers = await prisma.user.findMany()
 
         res.status(200).json(allUsers)
@@ -61,6 +61,23 @@ app.put('/usuarios/:id', async (req, res) => {
         res.status(400).send("Erro ao tentar editar usuário.")
     }
 
+})
+
+app.delete('/usuarios/:id', async (req, res)=>{
+
+    const id = req.params.id
+
+    try {
+        await prisma.user.delete({
+            where: { id: id}
+        })
+    
+        res.status(200).send("Usuário deletado com sucesso!")
+
+    } catch (error) {
+        res.status(400).send("Erro ao tentar deletar usuário.")
+    }
+    
 })
 
 app.listen(3000)
